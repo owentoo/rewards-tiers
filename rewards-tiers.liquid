@@ -1,7 +1,8 @@
 {% comment %}
   Rewards Tiers Section
   - Logged out: shows all tiers with static requirement text
-  - Logged in: highlights current tier with badge, shows spend-to-next-tier
+  - Logged in: highlights current tier with badge, greyed out past tiers,
+    spend-to-next-tier on current tier card
   - Metafields: klaviyo.swell_vip_tier_name, klaviyo.loyalty_nt_amount_cents
 {% endcomment %}
 
@@ -52,7 +53,7 @@
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
     position: relative;
     overflow: visible;
   }
@@ -62,12 +63,30 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
   }
 
+  /* Active tier — deeper shadow */
+  #rt-{{ section.id }} .tier-card--active {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.14);
+  }
+
+  #rt-{{ section.id }} .tier-card--active:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16), 0 16px 48px rgba(0,0,0,0.16);
+  }
+
+  /* Unlocked — greyed out */
+  #rt-{{ section.id }} .tier-card--unlocked {
+    opacity: 0.45;
+  }
+
+  #rt-{{ section.id }} .tier-card--unlocked:hover {
+    opacity: 0.65;
+  }
+
   /* Badge */
   #rt-{{ section.id }} .tier-card__badge {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.75);
     color: #fff;
     font-size: 0.55rem;
     font-weight: 700;
@@ -76,11 +95,6 @@
     padding: 4px 10px;
     border-radius: 20px;
     z-index: 3;
-    backdrop-filter: blur(4px);
-  }
-
-  #rt-{{ section.id }} .tier-card--active {
-    box-shadow: 0 0 0 2px rgba(59,130,246,0.4), 0 4px 16px rgba(0,0,0,0.06);
   }
 
   /* Header */
@@ -161,13 +175,13 @@
     border-bottom: 1px solid #f1f5f9;
   }
 
-  #rt-{{ section.id }} .tier-card__requirement--highlight {
-    font-weight: 600;
-    color: #475569;
-  }
-
   #rt-{{ section.id }} .tier-card__requirement--unlocked {
     color: #16a34a;
+    font-weight: 600;
+  }
+
+  #rt-{{ section.id }} .tier-card__requirement--next {
+    color: #000;
     font-weight: 600;
   }
 
@@ -323,8 +337,8 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       gap: 12px;
-      padding: 20px 20px;
-      margin: -20px 0;
+      padding: 20px 20px 40px;
+      margin: -20px 0 -40px;
       scrollbar-width: none;
     }
 
@@ -356,6 +370,8 @@
 
     #rt-{{ section.id }} .carousel-dots {
       display: flex;
+      position: relative;
+      z-index: 2;
     }
 
     #rt-{{ section.id }} .perk-preview__popup {
@@ -453,12 +469,12 @@
       -%}
 
       <div
-        class="tier-card{% if is_current %} tier-card--active{% endif %}"
-        style="--grad-start: {{ block.settings.header_gradient_start }}; --grad-end: {{ block.settings.header_gradient_end }}; --icon-bg: {{ block.settings.perk_icon_bg }}; --icon-color: {{ block.settings.perk_icon_color }};"
+        class="tier-card{% if is_current %} tier-card--active{% endif %}{% if is_unlocked %} tier-card--unlocked{% endif %}"
+        style="--grad-start: {{ block.settings.header_gradient_start }}; --grad-end: {{ block.settings.header_gradient_end }};"
         {{ block.shopify_attributes }}
       >
         {% if is_current %}
-          <span class="tier-card__badge">Your Tier</span>
+          <span class="tier-card__badge">Current Rank</span>
         {% endif %}
 
         <div class="tier-card__header" style="background: linear-gradient(160deg, {{ block.settings.header_gradient_start }} 0%, {{ block.settings.header_gradient_end }} 100%);">
@@ -486,14 +502,22 @@
         <div class="tier-card__body">
           {%- if customer and current_tier != blank -%}
             {%- if is_current -%}
-              <div class="tier-card__requirement tier-card__requirement--unlocked">Current Tier</div>
+              {%- if is_next == false and current_tier_index < 3 -%}
+                {%- assign next_block_index = current_tier_index | plus: 1 -%}
+                {%- for b in section.blocks -%}
+                  {%- if forloop.index0 == next_block_index -%}
+                    {%- assign next_tier_name = b.settings.belt_name -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                <div class="tier-card__requirement tier-card__requirement--next">
+                  Spend ${{ spend_remaining_dollars | round: 2 }} more to reach {{ next_tier_name }}
+                </div>
+              {%- else -%}
+                <div class="tier-card__requirement tier-card__requirement--next">Highest Tier</div>
+              {%- endif -%}
             {%- elsif is_unlocked -%}
               <div class="tier-card__requirement tier-card__requirement--unlocked">&#10003; Unlocked</div>
-            {%- elsif is_next -%}
-              {%- assign next_tier_name = block.settings.belt_name -%}
-              <div class="tier-card__requirement tier-card__requirement--highlight">
-                Spend ${{ spend_remaining_dollars | round: 2 }} more to reach {{ next_tier_name }}
-              </div>
             {%- else -%}
               <div class="tier-card__requirement">{{ block.settings.requirement_text }}</div>
             {%- endif -%}
@@ -502,7 +526,7 @@
           {%- endif -%}
 
           <ul class="tier-card__perks">
-            {% for i in (1..3) %}
+            {% for i in (1..6) %}
               {%- assign perk_key = 'perk_' | append: i -%}
               {%- assign perk_img_key = 'perk_' | append: i | append: '_preview_image' -%}
               {%- assign perk_text = block.settings[perk_key] -%}
@@ -514,10 +538,10 @@
                     <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </span>
                   {{ perk_text }}
-                  {% if perk_img != blank %}
+                  {% if perk_img != blank and section.settings.eye_icon != blank %}
                     <span class="perk-preview">
                       <span class="perk-preview__trigger" data-preview-trigger>
-                        <img src="{{ 'eye.png' | asset_url }}" alt="Preview">
+                        <img src="{{ section.settings.eye_icon | image_url: width: 40 }}" alt="Preview">
                       </span>
                       <span class="perk-preview__popup">
                         <img src="{{ perk_img | image_url: width: 560 }}" alt="{{ perk_text }}">
@@ -565,6 +589,16 @@
         const active = Math.round(grid.scrollLeft / cardWidth);
         dots.forEach((d, i) => d.classList.toggle('active', i === active));
       });
+
+      /* On mobile, scroll to current rank card */
+      if (window.innerWidth <= 700) {
+        const activeCard = section.querySelector('.tier-card--active');
+        if (activeCard) {
+          setTimeout(() => {
+            activeCard.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' });
+          }, 100);
+        }
+      }
     }
 
     /* Lightbox (mobile) */
@@ -613,6 +647,12 @@
       "max": 1600,
       "step": 50,
       "default": 1400
+    },
+    {
+      "type": "image_picker",
+      "id": "eye_icon",
+      "label": "Preview Eye Icon",
+      "info": "Small eye icon shown next to perks with preview images"
     }
   ],
   "blocks": [
@@ -714,6 +754,36 @@
           "type": "image_picker",
           "id": "perk_3_preview_image",
           "label": "Perk 3 Preview Image"
+        },
+        {
+          "type": "text",
+          "id": "perk_4",
+          "label": "Perk 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "perk_4_preview_image",
+          "label": "Perk 4 Preview Image"
+        },
+        {
+          "type": "text",
+          "id": "perk_5",
+          "label": "Perk 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "perk_5_preview_image",
+          "label": "Perk 5 Preview Image"
+        },
+        {
+          "type": "text",
+          "id": "perk_6",
+          "label": "Perk 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "perk_6_preview_image",
+          "label": "Perk 6 Preview Image"
         }
       ]
     }
