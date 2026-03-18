@@ -558,8 +558,9 @@
                     {%- break -%}
                   {%- endif -%}
                 {%- endfor -%}
+                {%- assign spend_formatted = spend_remaining_cents | times: 1 | money_without_currency -%}
                 <div class="tier-card__requirement tier-card__requirement--next">
-                  Spend ${{ spend_remaining_dollars | round: 2 }} more to reach {{ next_tier_name }}
+                  Spend ${{ spend_formatted }} more to reach {{ next_tier_name }}
                 </div>
               {%- else -%}
                 <div class="tier-card__requirement tier-card__requirement--next">Highest Tier</div>
