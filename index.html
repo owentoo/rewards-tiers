@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rewards Tiers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f5f7;
+      color: #1a1a1a;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .concept-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* ========================================
+       TIERS GRID
+    ======================================== */
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .tier-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: visible;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    /* ---- Header ---- */
+    .tier-card__header {
+      padding: 28px 24px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px 16px 0 0;
+    }
+
+    /* Decorative radial glow behind the ninja */
+    .tier-card__header::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .tier-card__ninja {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+      position: relative;
+      z-index: 1;
+    }
+
+    .tier-card__belt-name {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tier-card__cash-back {
+      font-size: 3.25rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tier-card__cash-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- White Belt header ---- */
+    .tier-card--white .tier-card__header {
+      background: linear-gradient(160deg, #f9f9f9 0%, #F1F1F1 40%, #e4e4e4 100%);
+    }
+    .tier-card--white .tier-card__header::before { background: #d4d4d4; }
+    .tier-card--white .tier-card__belt-name { color: rgba(0,0,0,0.65); }
+    .tier-card--white .tier-card__cash-back { color: #000; }
+    .tier-card--white .tier-card__cash-label { color: rgba(0,0,0,0.45); }
+
+    /* ---- Yellow Belt header ---- */
+    .tier-card--yellow .tier-card__header {
+      background: linear-gradient(160deg, #fef0a0 0%, #FADD1D 40%, #e6c800 100%);
+    }
+    .tier-card--yellow .tier-card__header::before { background: #FADD1D; opacity: 0.6; }
+    .tier-card--yellow .tier-card__belt-name { color: rgba(0,0,0,0.65); }
+    .tier-card--yellow .tier-card__cash-back { color: #000; }
+    .tier-card--yellow .tier-card__cash-label { color: rgba(0,0,0,0.45); }
+
+    /* ---- Blue Belt header ---- */
+    .tier-card--blue .tier-card__header {
+      background: linear-gradient(160deg, #6bb8f7 0%, #2098F0 40%, #1580d0 100%);
+    }
+    .tier-card--blue .tier-card__header::before { background: #2098F0; opacity: 0.6; }
+    .tier-card--blue .tier-card__belt-name { color: rgba(255,255,255,0.8); }
+    .tier-card--blue .tier-card__cash-back { color: #fff; }
+    .tier-card--blue .tier-card__cash-label { color: rgba(255,255,255,0.6); }
+
+    /* ---- Black Belt header ---- */
+    .tier-card--black .tier-card__header {
+      background: linear-gradient(160deg, #5a6270 0%, #3A414A 35%, #2c3239 100%);
+    }
+    .tier-card--black .tier-card__header::before { background: #5a6270; opacity: 0.3; }
+    .tier-card--black .tier-card__belt-name { color: rgba(255,255,255,0.7); }
+    .tier-card--black .tier-card__cash-back { color: #fff; }
+    .tier-card--black .tier-card__cash-label { color: rgba(255,255,255,0.55); }
+
+    /* ---- Body (always white) ---- */
+    .tier-card__body {
+      padding: 20px 24px 24px;
+      background: #fff;
+      border-radius: 0 0 16px 16px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .tier-card__requirement {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .tier-card__perks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tier-card__perk {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    .tier-card__perk-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tier-card--white .tier-card__perk-icon { background: #f1f5f9; color: #64748b; }
+    .tier-card--yellow .tier-card__perk-icon { background: #fef3c7; color: #d97706; }
+    .tier-card--blue .tier-card__perk-icon { background: #dbeafe; color: #2563eb; }
+    .tier-card--black .tier-card__perk-icon { background: #1e293b; color: #e2e8f0; }
+
+    .tier-card__perk-icon svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* ========================================
+       PREVIEW TOOLTIP
+    ======================================== */
+    .perk-preview {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .perk-preview__trigger {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 5px;
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+      vertical-align: middle;
+      position: relative;
+      top: 3px;
+      left: -4px;
+    }
+
+    .perk-preview__trigger:hover {
+      background: #cbd5e1;
+    }
+
+    .perk-preview__trigger svg {
+      display: none;
+    }
+
+    .perk-preview__trigger img {
+      width: 10px;
+      height: 10px;
+      opacity: 0.45;
+    }
+
+    .perk-preview__popup {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: -8px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.08);
+      padding: 8px;
+      z-index: 100;
+      width: 280px;
+    }
+
+    .perk-preview__popup::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      right: 12px;
+      border: 6px solid transparent;
+      border-top-color: #fff;
+    }
+
+    .perk-preview__popup img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .perk-preview__trigger:hover + .perk-preview__popup,
+    .perk-preview__popup:hover {
+      display: block;
+    }
+
+    /* ========================================
+       V2 — CROPPED / EDITORIAL
+    ======================================== */
+    .v2-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .v2-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin-bottom: 40px;
+    }
+
+    .v2-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .v2-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: visible;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .v2-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    /* Header — split layout: text bottom-left, ninja right */
+    .v2-card__header {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 24px 20px 24px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Ninja — right half, vertically centered, taller */
+    .v2-card__ninja {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 130px;
+      height: 155px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 20px rgba(0,0,0,0.18));
+      z-index: 1;
+    }
+
+    /* Belt name — small tag at top-left */
+    .v2-card__belt-name {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Bottom text group — % with label below */
+    .v2-card__text-row {
+      position: relative;
+      z-index: 2;
+    }
+
+    .v2-card__cash-back {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+    }
+
+    .v2-card__cash-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* White */
+    .v2-card--white .v2-card__header {
+      background: linear-gradient(160deg, #f9f9f9 0%, #F1F1F1 40%, #e4e4e4 100%);
+    }
+    .v2-card--white .v2-card__belt-name { color: rgba(0,0,0,0.65); }
+    .v2-card--white .v2-card__cash-back { color: #000; }
+    .v2-card--white .v2-card__cash-label { color: rgba(0,0,0,0.45); }
+
+    /* Yellow */
+    .v2-card--yellow .v2-card__header {
+      background: linear-gradient(160deg, #fef0a0 0%, #FADD1D 40%, #e6c800 100%);
+    }
+    .v2-card--yellow .v2-card__belt-name { color: rgba(0,0,0,0.65); }
+    .v2-card--yellow .v2-card__cash-back { color: #000; }
+    .v2-card--yellow .v2-card__cash-label { color: rgba(0,0,0,0.45); }
+
+    /* Blue */
+    .v2-card--blue .v2-card__header {
+      background: linear-gradient(160deg, #6bb8f7 0%, #2098F0 40%, #1580d0 100%);
+    }
+    .v2-card--blue .v2-card__belt-name { color: rgba(255,255,255,0.8); }
+    .v2-card--blue .v2-card__cash-back { color: #fff; }
+    .v2-card--blue .v2-card__cash-label { color: rgba(255,255,255,0.6); }
+
+    /* Black */
+    .v2-card--black .v2-card__header {
+      background: linear-gradient(160deg, #5a6270 0%, #3A414A 35%, #2c3239 100%);
+    }
+    .v2-card--black .v2-card__belt-name { color: rgba(255,255,255,0.7); }
+    .v2-card--black .v2-card__cash-back { color: #fff; }
+    .v2-card--black .v2-card__cash-label { color: rgba(255,255,255,0.5); }
+
+    /* Body */
+    .v2-card__body {
+      padding: 20px 24px 24px;
+      background: #fff;
+      border-radius: 0 0 16px 16px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .v2-card__requirement {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .v2-card__perks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .v2-card__perk {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    .v2-card__perk-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .v2-card--white .v2-card__perk-icon { background: #f1f5f9; color: #64748b; }
+    .v2-card--yellow .v2-card__perk-icon { background: #fef3c7; color: #d97706; }
+    .v2-card--blue .v2-card__perk-icon { background: #dbeafe; color: #2563eb; }
+    .v2-card--black .v2-card__perk-icon { background: #1e293b; color: #e2e8f0; }
+
+    .v2-card__perk-icon svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* ========================================
+       CAROUSEL DOTS
+    ======================================== */
+    .carousel-dots {
+      display: none;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 0 0;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .carousel-dot.active {
+      background: #334155;
+      transform: scale(1.25);
+    }
+
+    /* ========================================
+       RESPONSIVE
+    ======================================== */
+    @media (max-width: 700px) {
+      .concept-section {
+        padding: 40px 0;
+      }
+
+      /* Horizontal scroll carousel */
+      .tiers-grid,
+      .v2-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 0 20px;
+        scrollbar-width: none;
+      }
+
+      .tiers-grid::-webkit-scrollbar,
+      .v2-grid::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tier-card,
+      .v2-card {
+        flex: 0 0 calc(100vw - 20px - 12px - 80px);
+        scroll-snap-align: center;
+      }
+
+      .tier-card:first-child,
+      .v2-card:first-child {
+        margin-left: calc((100vw - (100vw - 20px - 12px - 80px)) / 2 - 20px);
+      }
+
+      .tier-card:last-child,
+      .v2-card:last-child {
+        margin-right: calc((100vw - (100vw - 20px - 12px - 80px)) / 2 - 20px);
+      }
+
+      .tier-card__ninja {
+        width: 64px;
+        height: 64px;
+      }
+
+      .tier-card__cash-back {
+        font-size: 2.5rem;
+      }
+
+      .v2-card__header {
+        min-height: 160px;
+      }
+
+      .v2-card__ninja {
+        width: 110px;
+        height: 110px;
+      }
+
+      .v2-card__cash-back {
+        font-size: 3rem;
+      }
+
+      .carousel-dots {
+        display: flex;
+      }
+
+      hr[style] {
+        margin: 0 24px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="concept-section">
+
+    <div class="tiers-grid">
+
+      <!-- White Belt -->
+      <div class="tier-card tier-card--white">
+        <div class="tier-card__header">
+          <img class="tier-card__ninja" src="ninjas/White Ninja.png" alt="White Belt Ninja">
+          <div class="tier-card__belt-name">White Belt</div>
+          <div class="tier-card__cash-back">2%</div>
+          <div class="tier-card__cash-label">Cash Back*</div>
+        </div>
+        <div class="tier-card__body">
+          <div class="tier-card__requirement">Sign Up</div>
+          <ul class="tier-card__perks">
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Earn on every order
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Yellow Belt -->
+      <div class="tier-card tier-card--yellow">
+        <div class="tier-card__header">
+          <img class="tier-card__ninja" src="ninjas/Yellow Ninja.png" alt="Yellow Belt Ninja">
+          <div class="tier-card__belt-name">Yellow Belt</div>
+          <div class="tier-card__cash-back">4%</div>
+          <div class="tier-card__cash-label">Cash Back*</div>
+        </div>
+        <div class="tier-card__body">
+          <div class="tier-card__requirement">Spend $250 within 12 months</div>
+          <ul class="tier-card__perks">
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $10 Tier Entry Gift
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Blue Belt -->
+      <div class="tier-card tier-card--blue">
+        <div class="tier-card__header">
+          <img class="tier-card__ninja" src="ninjas/Blue Ninja.png" alt="Blue Belt Ninja">
+          <div class="tier-card__belt-name">Blue Belt</div>
+          <div class="tier-card__cash-back">6%</div>
+          <div class="tier-card__cash-label">Cash Back*</div>
+        </div>
+        <div class="tier-card__body">
+          <div class="tier-card__requirement">Spend $1,000 within 12 months</div>
+          <ul class="tier-card__perks">
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $20 Tier Entry Gift
+            </li>
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Free Ninja Keychain
+              <span class="perk-preview">
+                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
+                <span class="perk-preview__popup"><img src="ninjas/keychain.png" alt="Ninja Keychain"></span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Black Belt -->
+      <div class="tier-card tier-card--black">
+        <div class="tier-card__header">
+          <img class="tier-card__ninja" src="ninjas/Black Ninja.png" alt="Black Belt Ninja">
+          <div class="tier-card__belt-name">Black Belt</div>
+          <div class="tier-card__cash-back">10%</div>
+          <div class="tier-card__cash-label">Cash Back*</div>
+        </div>
+        <div class="tier-card__body">
+          <div class="tier-card__requirement">Spend $4,000 within 12 months</div>
+          <ul class="tier-card__perks">
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $30 Tier Entry Gift
+            </li>
+            <li class="tier-card__perk">
+              <span class="tier-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Free Ninja Dojo Defender
+              <span class="perk-preview">
+                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
+                <span class="perk-preview__popup"><img src="ninjas/plushie.png" alt="Ninja Dojo Defender"></span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-dots" id="v1-dots"></div>
+  </section>
+
+  <hr style="border:none; border-top:1px solid #e2e8f0; margin:0;">
+
+  <!-- ============================================
+       V2 — CROPPED / EDITORIAL
+  ============================================= -->
+  <section class="concept-section">
+    <div class="v2-grid">
+
+      <!-- White Belt -->
+      <div class="v2-card v2-card--white">
+        <div class="v2-card__header">
+          <img class="v2-card__ninja" src="ninjas/White Ninja.png" alt="White Belt Ninja">
+          <div class="v2-card__belt-name">White Belt</div>
+          <div class="v2-card__text-row">
+            <div class="v2-card__cash-back">2%</div>
+            <div class="v2-card__cash-label">Cash Back*</div>
+          </div>
+        </div>
+        <div class="v2-card__body">
+          <div class="v2-card__requirement">Sign Up</div>
+          <ul class="v2-card__perks">
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Earn on every order
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Yellow Belt -->
+      <div class="v2-card v2-card--yellow">
+        <div class="v2-card__header">
+          <img class="v2-card__ninja" src="ninjas/Yellow Ninja.png" alt="Yellow Belt Ninja">
+          <div class="v2-card__belt-name">Yellow Belt</div>
+          <div class="v2-card__text-row">
+            <div class="v2-card__cash-back">4%</div>
+            <div class="v2-card__cash-label">Cash Back*</div>
+          </div>
+        </div>
+        <div class="v2-card__body">
+          <div class="v2-card__requirement">Spend $250 within 12 months</div>
+          <ul class="v2-card__perks">
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $10 Tier Entry Gift
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Blue Belt -->
+      <div class="v2-card v2-card--blue">
+        <div class="v2-card__header">
+          <img class="v2-card__ninja" src="ninjas/Blue Ninja.png" alt="Blue Belt Ninja">
+          <div class="v2-card__belt-name">Blue Belt</div>
+          <div class="v2-card__text-row">
+            <div class="v2-card__cash-back">6%</div>
+            <div class="v2-card__cash-label">Cash Back*</div>
+          </div>
+        </div>
+        <div class="v2-card__body">
+          <div class="v2-card__requirement">Spend $1,000 within 12 months</div>
+          <ul class="v2-card__perks">
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $20 Tier Entry Gift
+            </li>
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Free Ninja Keychain
+              <span class="perk-preview">
+                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
+                <span class="perk-preview__popup"><img src="ninjas/keychain.png" alt="Ninja Keychain"></span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Black Belt -->
+      <div class="v2-card v2-card--black">
+        <div class="v2-card__header">
+          <img class="v2-card__ninja" src="ninjas/Black Ninja.png" alt="Black Belt Ninja">
+          <div class="v2-card__belt-name">Black Belt</div>
+          <div class="v2-card__text-row">
+            <div class="v2-card__cash-back">10%</div>
+            <div class="v2-card__cash-label">Cash Back*</div>
+          </div>
+        </div>
+        <div class="v2-card__body">
+          <div class="v2-card__requirement">Spend $4,000 within 12 months</div>
+          <ul class="v2-card__perks">
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              $30 Tier Entry Gift
+            </li>
+            <li class="v2-card__perk">
+              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Free Ninja Dojo Defender
+              <span class="perk-preview">
+                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
+                <span class="perk-preview__popup"><img src="ninjas/plushie.png" alt="Ninja Dojo Defender"></span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-dots" id="v2-dots"></div>
+  </section>
+
+  <script>
+    function initCarousel(gridSelector, dotsId) {
+      const grid = document.querySelector(gridSelector);
+      const dotsContainer = document.getElementById(dotsId);
+      const cards = grid.children;
+      const count = cards.length;
+
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => {
+          cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        });
+        dotsContainer.appendChild(dot);
+      }
+
+      const dots = dotsContainer.querySelectorAll('.carousel-dot');
+
+      grid.addEventListener('scroll', () => {
+        const scrollLeft = grid.scrollLeft;
+        const cardWidth = cards[0].offsetWidth + 12;
+        const active = Math.round(scrollLeft / cardWidth);
+        dots.forEach((d, i) => d.classList.toggle('active', i === active));
+      });
+    }
+
+    initCarousel('.tiers-grid', 'v1-dots');
+    initCarousel('.v2-grid', 'v2-dots');
+  </script>
+
+</body>
+</html>
