@@ -43,18 +43,33 @@
       overflow: visible;
     }
 
-    .tier-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+    @media (hover: hover) {
+      .tier-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+      }
     }
 
     /* ---- Active tier ---- */
     .tier-card--active {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.14);
+      z-index: 2;
+      margin: -30px -5px -30px; /* grow up by banner height, out by 5px each side, down by padding */
+      outline: 4px solid var(--ring-color, rgba(0,0,0,0.25));
+      outline-offset: 0px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.22), 0 24px 56px rgba(0,0,0,0.20);
+      animation: activeGlow 3s ease-in-out infinite;
     }
 
-    .tier-card--active:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.16), 0 16px 48px rgba(0,0,0,0.16);
+    @keyframes activeGlow {
+      0%, 100% { outline-color: var(--ring-color, rgba(0,0,0,0.2)); }
+      50% { outline-color: var(--ring-color-bright, rgba(0,0,0,0.4)); }
+    }
+
+    @media (hover: hover) {
+      .tier-card--active:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.26), 0 28px 64px rgba(0,0,0,0.22);
+      }
     }
 
     /* ---- Unlocked (greyed out) ---- */
@@ -66,20 +81,28 @@
       opacity: 0.65;
     }
 
-    /* Badge */
+    /* Badge — full-width black banner */
     .tier-card__badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(0,0,0,0.75);
+      display: block;
+      position: static;
+      background: #000;
       color: #fff;
-      font-size: 0.55rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
+      padding: 8px 16px;
+      text-align: left;
+      border-radius: 16px 16px 0 0;
       z-index: 3;
+    }
+
+    .tier-card--active .tier-card__header {
+      border-radius: 0;
+    }
+
+    .tier-card--active .tier-card__body {
+      padding-bottom: 54px; /* 24px default + 30px to balance the banner */
     }
 
     /* ---- Header ---- */
@@ -146,6 +169,7 @@
     .tier-card--white .tier-card__header {
       background: linear-gradient(160deg, #f9f9f9 0%, #F1F1F1 40%, #e4e4e4 100%);
     }
+    .tier-card--white { --ring-color: #d4d4d4; --ring-color-bright: #b8b8b8; }
     .tier-card--white .tier-card__header::before { background: #d4d4d4; }
     .tier-card--white .tier-card__belt-name { color: rgba(0,0,0,0.65); }
     .tier-card--white .tier-card__cash-back { color: #000; }
@@ -154,6 +178,7 @@
     .tier-card--yellow .tier-card__header {
       background: linear-gradient(160deg, #fef0a0 0%, #FADD1D 40%, #e6c800 100%);
     }
+    .tier-card--yellow { --ring-color: #FADD1D; --ring-color-bright: #e6c800; }
     .tier-card--yellow .tier-card__header::before { background: #FADD1D; opacity: 0.6; }
     .tier-card--yellow .tier-card__belt-name { color: rgba(0,0,0,0.65); }
     .tier-card--yellow .tier-card__cash-back { color: #000; }
@@ -162,6 +187,7 @@
     .tier-card--blue .tier-card__header {
       background: linear-gradient(160deg, #6bb8f7 0%, #2098F0 40%, #1580d0 100%);
     }
+    .tier-card--blue { --ring-color: #2098F0; --ring-color-bright: #1580d0; }
     .tier-card--blue .tier-card__header::before { background: #2098F0; opacity: 0.6; }
     .tier-card--blue .tier-card__belt-name { color: rgba(255,255,255,0.8); }
     .tier-card--blue .tier-card__cash-back { color: #fff; }
@@ -170,6 +196,7 @@
     .tier-card--black .tier-card__header {
       background: linear-gradient(160deg, #5a6270 0%, #3A414A 35%, #2c3239 100%);
     }
+    .tier-card--black { --ring-color: #5a6270; --ring-color-bright: #3A414A; }
     .tier-card--black .tier-card__header::before { background: #5a6270; opacity: 0.3; }
     .tier-card--black .tier-card__belt-name { color: rgba(255,255,255,0.7); }
     .tier-card--black .tier-card__cash-back { color: #fff; }
@@ -296,7 +323,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.08);
       padding: 8px;
-      z-index: 9999;
+      z-index: 99999;
       width: 280px;
     }
 
@@ -320,6 +347,11 @@
       .perk-preview__trigger:hover + .perk-preview__popup,
       .perk-preview__popup:hover {
         display: block;
+      }
+
+      .tier-card:has(.perk-preview__trigger:hover),
+      .tier-card:has(.perk-preview__popup:hover) {
+        z-index: 100;
       }
     }
 
@@ -360,15 +392,25 @@
         overflow: visible;
       }
 
+      .tiers-grid-wrapper {
+        overflow: visible;
+      }
+
       .tiers-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
-        padding: 20px 20px 40px;
-        margin: -20px 0 -40px;
+        padding: 60px 20px 80px;
         scrollbar-width: none;
+      }
+
+      .tier-card--active {
+        margin: -30px 0;
+        z-index: 10;
+        position: relative;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.16), 0 16px 36px rgba(0,0,0,0.12);
       }
 
       .tiers-grid::-webkit-scrollbar { display: none; }
@@ -391,7 +433,9 @@
       .carousel-dots {
         display: flex;
         position: relative;
-        z-index: 2;
+        z-index: 20;
+        margin-top: -50px;
+        padding-bottom: 10px;
       }
 
       .perk-preview__popup { display: none !important; }
@@ -441,9 +485,10 @@
   <!-- Simulating: Yellow Belt customer, $241.01 to next tier -->
   <section class="concept-section">
 
+    <div class="tiers-grid-wrapper">
     <div class="tiers-grid">
 
-      <!-- White Belt — UNLOCKED (greyed out) -->
+      <!-- White Belt — UNLOCKED -->
       <div class="tier-card tier-card--white tier-card--unlocked">
         <div class="tier-card__header">
           <img class="tier-card__ninja" src="ninjas/White Ninja.png" alt="White Belt Ninja">
@@ -536,6 +581,7 @@
         </div>
       </div>
 
+    </div>
     </div>
     <div class="carousel-dots" id="v1-dots"></div>
   </section>

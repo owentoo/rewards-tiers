@@ -58,18 +58,41 @@
     overflow: visible;
   }
 
-  #rt-{{ section.id }} .tier-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+  @media (hover: hover) {
+    #rt-{{ section.id }} .tier-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
+    }
   }
 
-  /* Active tier — deeper shadow */
+  /* Active tier */
   #rt-{{ section.id }} .tier-card--active {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.14);
+    z-index: 2;
+    margin: -30px -5px -30px;
+    outline: 4px solid var(--ring-color, rgba(0,0,0,0.25));
+    outline-offset: 0px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.22), 0 24px 56px rgba(0,0,0,0.20);
+    animation: rtActiveGlow-{{ section.id }} 3s ease-in-out infinite;
   }
 
-  #rt-{{ section.id }} .tier-card--active:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.16), 0 16px 48px rgba(0,0,0,0.16);
+  @keyframes rtActiveGlow-{{ section.id }} {
+    0%, 100% { outline-color: var(--ring-color, rgba(0,0,0,0.2)); }
+    50% { outline-color: var(--ring-color-bright, rgba(0,0,0,0.4)); }
+  }
+
+  @media (hover: hover) {
+    #rt-{{ section.id }} .tier-card--active:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.26), 0 28px 64px rgba(0,0,0,0.22);
+    }
+  }
+
+  #rt-{{ section.id }} .tier-card--active .tier-card__header {
+    border-radius: 0;
+  }
+
+  #rt-{{ section.id }} .tier-card--active .tier-card__body {
+    padding-bottom: 54px;
   }
 
   /* Unlocked — greyed out */
@@ -81,19 +104,19 @@
     opacity: 0.65;
   }
 
-  /* Badge */
+  /* Badge — full-width black banner */
   #rt-{{ section.id }} .tier-card__badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.75);
+    display: block;
+    position: static;
+    background: #000;
     color: #fff;
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    text-align: left;
+    border-radius: 16px 16px 0 0;
     z-index: 3;
   }
 
@@ -263,7 +286,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.08);
     padding: 8px;
-    z-index: 9999;
+    z-index: 99999;
     width: 280px;
   }
 
@@ -287,6 +310,11 @@
     #rt-{{ section.id }} .perk-preview__trigger:hover + .perk-preview__popup,
     #rt-{{ section.id }} .perk-preview__popup:hover {
       display: block;
+    }
+
+    #rt-{{ section.id }} .tier-card:has(.perk-preview__trigger:hover),
+    #rt-{{ section.id }} .tier-card:has(.perk-preview__popup:hover) {
+      z-index: 100;
     }
   }
 
@@ -331,19 +359,29 @@
       margin-bottom: 24px;
     }
 
+    #rt-{{ section.id }} .tiers-grid-wrapper {
+      overflow: visible;
+    }
+
     #rt-{{ section.id }} .tiers-grid {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       gap: 12px;
-      padding: 20px 20px 40px;
-      margin: -20px 0 -40px;
+      padding: 60px 20px 80px;
       scrollbar-width: none;
     }
 
     #rt-{{ section.id }} .tiers-grid::-webkit-scrollbar {
       display: none;
+    }
+
+    #rt-{{ section.id }} .tier-card--active {
+      margin: -30px 0;
+      z-index: 10;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.16), 0 16px 36px rgba(0,0,0,0.12);
     }
 
     #rt-{{ section.id }} .tier-card {
@@ -371,7 +409,9 @@
     #rt-{{ section.id }} .carousel-dots {
       display: flex;
       position: relative;
-      z-index: 2;
+      z-index: 20;
+      margin-top: -50px;
+      padding-bottom: 10px;
     }
 
     #rt-{{ section.id }} .perk-preview__popup {
@@ -439,6 +479,7 @@
     <h2 class="rt-heading">{{ section.settings.section_heading }}</h2>
   {% endif %}
 
+  <div class="tiers-grid-wrapper">
   <div class="tiers-grid" data-tiers-grid>
     {% for block in section.blocks %}
       {%- liquid
@@ -470,7 +511,7 @@
 
       <div
         class="tier-card{% if is_current %} tier-card--active{% endif %}{% if is_unlocked %} tier-card--unlocked{% endif %}"
-        style="--grad-start: {{ block.settings.header_gradient_start }}; --grad-end: {{ block.settings.header_gradient_end }};"
+        style="--grad-start: {{ block.settings.header_gradient_start }}; --grad-end: {{ block.settings.header_gradient_end }};{% if is_current %} --ring-color: {{ block.settings.header_gradient_start }}; --ring-color-bright: {{ block.settings.header_gradient_end }};{% endif %}"
         {{ block.shopify_attributes }}
       >
         {% if is_current %}
@@ -555,6 +596,7 @@
         </div>
       </div>
     {% endfor %}
+  </div>
   </div>
 
   <div class="carousel-dots" data-carousel-dots></div>
