@@ -154,8 +154,9 @@
   }
 
   #rt-{{ section.id }} .tier-card__belt-name {
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-size: {{ section.settings.belt_name_size_desktop }}px;
+    font-weight: {{ section.settings.belt_name_weight_desktop }};
+    color: {{ section.settings.belt_name_color_desktop }};
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 6px;
@@ -402,6 +403,12 @@
       height: 90px;
     }
 
+    #rt-{{ section.id }} .tier-card__belt-name {
+      font-size: {{ section.settings.belt_name_size_mobile }}px;
+      font-weight: {{ section.settings.belt_name_weight_mobile }};
+      color: {{ section.settings.belt_name_color_mobile }};
+    }
+
     #rt-{{ section.id }} .tier-card__cash-back {
       font-size: 2.5rem;
     }
@@ -472,7 +479,7 @@
 
   <div class="lightbox" data-lightbox>
     <button class="lightbox__close" data-lightbox-close>&times;</button>
-    <img class="lightbox__img" data-lightbox-img src="" alt="">
+    <img class="lightbox__img" data-lightbox-img src="#" alt="Preview image" width="400" height="400" loading="lazy">
   </div>
 
   {% if section.settings.section_heading != blank %}
@@ -529,7 +536,7 @@
               height="160"
             >
           {% endif %}
-          <div class="tier-card__belt-name" style="color: {% if text_dark %}rgba(0,0,0,0.65){% else %}rgba(255,255,255,0.8){% endif %};">
+          <div class="tier-card__belt-name" style="color: {% if text_dark %}{{ section.settings.belt_name_color_desktop }}{% else %}rgba(255,255,255,0.8){% endif %};">
             {{ block.settings.belt_name }}
           </div>
           <div class="tier-card__cash-back" style="color: {% if text_dark %}#000{% else %}#fff{% endif %};">
@@ -582,10 +589,10 @@
                   {% if perk_img != blank and section.settings.eye_icon != blank %}
                     <span class="perk-preview">
                       <span class="perk-preview__trigger" data-preview-trigger>
-                        <img src="{{ section.settings.eye_icon | image_url: width: 40 }}" alt="Preview">
+                        <img src="{{ section.settings.eye_icon | image_url: width: 40 }}" alt="Preview" width="20" height="20" loading="lazy">
                       </span>
                       <span class="perk-preview__popup">
-                        <img src="{{ perk_img | image_url: width: 560 }}" alt="{{ perk_text }}">
+                        <img src="{{ perk_img | image_url: width: 560 }}" alt="{{ perk_text }}" width="280" height="280" loading="lazy">
                       </span>
                     </span>
                   {% endif %}
@@ -695,6 +702,64 @@
       "id": "eye_icon",
       "label": "Preview Eye Icon",
       "info": "Small eye icon shown next to perks with preview images"
+    },
+    {
+      "type": "header",
+      "content": "Belt Name — Desktop"
+    },
+    {
+      "type": "range",
+      "id": "belt_name_size_desktop",
+      "label": "Font Size (px)",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "belt_name_weight_desktop",
+      "label": "Font Weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 800
+    },
+    {
+      "type": "color",
+      "id": "belt_name_color_desktop",
+      "label": "Font Color (Dark Tiers)",
+      "default": "#000000",
+      "info": "Used on tiers with dark text. Light tiers use white automatically."
+    },
+    {
+      "type": "header",
+      "content": "Belt Name — Mobile"
+    },
+    {
+      "type": "range",
+      "id": "belt_name_size_mobile",
+      "label": "Font Size (px)",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "belt_name_weight_mobile",
+      "label": "Font Weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "belt_name_color_mobile",
+      "label": "Font Color (Dark Tiers)",
+      "default": "#000000",
+      "info": "Used on tiers with dark text on mobile."
     }
   ],
   "blocks": [
