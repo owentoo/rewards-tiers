@@ -12,7 +12,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f4f5f7;
+      background: #fff;
       color: #1a1a1a;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
@@ -21,7 +21,7 @@
     .concept-section {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 60px 24px;
+      padding: 60px 32px;
     }
 
     /* ========================================
@@ -31,6 +31,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
+      padding: 8px 0;
     }
 
     .tier-card {
@@ -72,8 +73,8 @@
     }
 
     .tier-card__ninja {
-      width: 80px;
-      height: 80px;
+      width: 160px;
+      height: 160px;
       object-fit: contain;
       margin-bottom: 12px;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
@@ -249,7 +250,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.08);
       padding: 8px;
-      z-index: 100;
+      z-index: 9999;
       width: 280px;
     }
 
@@ -269,189 +270,15 @@
       display: block;
     }
 
-    .perk-preview__trigger:hover + .perk-preview__popup,
-    .perk-preview__popup:hover {
-      display: block;
+    @media (hover: hover) {
+      .perk-preview__trigger:hover + .perk-preview__popup,
+      .perk-preview__popup:hover {
+        display: block;
+      }
     }
 
-    /* ========================================
-       V2 — CROPPED / EDITORIAL
-    ======================================== */
-    .v2-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #94a3b8;
-      margin-bottom: 8px;
-    }
-
-    .v2-title {
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #0f172a;
-      margin-bottom: 40px;
-    }
-
-    .v2-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-
-    .v2-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: visible;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .v2-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.08);
-    }
-
-    /* Header — split layout: text bottom-left, ninja right */
-    .v2-card__header {
-      position: relative;
-      overflow: hidden;
-      border-radius: 16px 16px 0 0;
-      padding: 20px 24px 20px 24px;
-      min-height: 190px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    /* Ninja — right half, vertically centered, taller */
-    .v2-card__ninja {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 130px;
-      height: 155px;
-      object-fit: contain;
-      filter: drop-shadow(0 6px 20px rgba(0,0,0,0.18));
-      z-index: 1;
-    }
-
-    /* Belt name — small tag at top-left */
-    .v2-card__belt-name {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Bottom text group — % with label below */
-    .v2-card__text-row {
-      position: relative;
-      z-index: 2;
-    }
-
-    .v2-card__cash-back {
-      font-size: 4rem;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.85;
-    }
-
-    .v2-card__cash-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-top: 4px;
-    }
-
-    /* White */
-    .v2-card--white .v2-card__header {
-      background: linear-gradient(160deg, #f9f9f9 0%, #F1F1F1 40%, #e4e4e4 100%);
-    }
-    .v2-card--white .v2-card__belt-name { color: rgba(0,0,0,0.65); }
-    .v2-card--white .v2-card__cash-back { color: #000; }
-    .v2-card--white .v2-card__cash-label { color: rgba(0,0,0,0.45); }
-
-    /* Yellow */
-    .v2-card--yellow .v2-card__header {
-      background: linear-gradient(160deg, #fef0a0 0%, #FADD1D 40%, #e6c800 100%);
-    }
-    .v2-card--yellow .v2-card__belt-name { color: rgba(0,0,0,0.65); }
-    .v2-card--yellow .v2-card__cash-back { color: #000; }
-    .v2-card--yellow .v2-card__cash-label { color: rgba(0,0,0,0.45); }
-
-    /* Blue */
-    .v2-card--blue .v2-card__header {
-      background: linear-gradient(160deg, #6bb8f7 0%, #2098F0 40%, #1580d0 100%);
-    }
-    .v2-card--blue .v2-card__belt-name { color: rgba(255,255,255,0.8); }
-    .v2-card--blue .v2-card__cash-back { color: #fff; }
-    .v2-card--blue .v2-card__cash-label { color: rgba(255,255,255,0.6); }
-
-    /* Black */
-    .v2-card--black .v2-card__header {
-      background: linear-gradient(160deg, #5a6270 0%, #3A414A 35%, #2c3239 100%);
-    }
-    .v2-card--black .v2-card__belt-name { color: rgba(255,255,255,0.7); }
-    .v2-card--black .v2-card__cash-back { color: #fff; }
-    .v2-card--black .v2-card__cash-label { color: rgba(255,255,255,0.5); }
-
-    /* Body */
-    .v2-card__body {
-      padding: 20px 24px 24px;
-      background: #fff;
-      border-radius: 0 0 16px 16px;
-      position: relative;
-      overflow: visible;
-    }
-
-    .v2-card__requirement {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #94a3b8;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .v2-card__perks {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .v2-card__perk {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #334155;
-    }
-
-    .v2-card__perk-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .v2-card--white .v2-card__perk-icon { background: #f1f5f9; color: #64748b; }
-    .v2-card--yellow .v2-card__perk-icon { background: #fef3c7; color: #d97706; }
-    .v2-card--blue .v2-card__perk-icon { background: #dbeafe; color: #2563eb; }
-    .v2-card--black .v2-card__perk-icon { background: #1e293b; color: #e2e8f0; }
-
-    .v2-card__perk-icon svg {
-      width: 10px;
-      height: 10px;
+    .lightbox {
+      display: none;
     }
 
     /* ========================================
@@ -485,62 +312,46 @@
     ======================================== */
     @media (max-width: 700px) {
       .concept-section {
-        padding: 40px 0;
+        padding: 40px 0 40px 0;
+        overflow: visible;
       }
 
       /* Horizontal scroll carousel */
-      .tiers-grid,
-      .v2-grid {
+      .tiers-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
-        padding: 0 20px;
+        padding: 20px 20px;
+        margin: -20px 0;
         scrollbar-width: none;
       }
 
-      .tiers-grid::-webkit-scrollbar,
-      .v2-grid::-webkit-scrollbar {
+      .tiers-grid::-webkit-scrollbar {
         display: none;
       }
 
-      .tier-card,
-      .v2-card {
+      .tier-card {
         flex: 0 0 calc(100vw - 20px - 12px - 80px);
         scroll-snap-align: center;
       }
 
-      .tier-card:first-child,
-      .v2-card:first-child {
+      .tier-card:first-child {
         margin-left: calc((100vw - (100vw - 20px - 12px - 80px)) / 2 - 20px);
       }
 
-      .tier-card:last-child,
-      .v2-card:last-child {
+      .tier-card:last-child {
         margin-right: calc((100vw - (100vw - 20px - 12px - 80px)) / 2 - 20px);
       }
 
       .tier-card__ninja {
-        width: 64px;
-        height: 64px;
+        width: 90px;
+        height: 90px;
       }
 
       .tier-card__cash-back {
         font-size: 2.5rem;
-      }
-
-      .v2-card__header {
-        min-height: 160px;
-      }
-
-      .v2-card__ninja {
-        width: 110px;
-        height: 110px;
-      }
-
-      .v2-card__cash-back {
-        font-size: 3rem;
       }
 
       .carousel-dots {
@@ -550,10 +361,68 @@
       hr[style] {
         margin: 0 24px !important;
       }
+
+      /* Hide default popups on mobile — use lightbox instead */
+      .perk-preview__popup {
+        display: none !important;
+      }
+
+      .lightbox {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.75);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .lightbox.active {
+        display: flex;
+      }
+
+      .lightbox__img {
+        width: 90vw;
+        max-width: 400px;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+      }
+
+      .lightbox__close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.15);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1;
+      }
+
+      .lightbox__close:hover {
+        background: rgba(255,255,255,0.3);
+      }
     }
   </style>
 </head>
 <body>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lightbox-close">&times;</button>
+    <img class="lightbox__img" id="lightbox-img" src="" alt="">
+  </div>
 
   <section class="concept-section">
 
@@ -655,117 +524,6 @@
     <div class="carousel-dots" id="v1-dots"></div>
   </section>
 
-  <hr style="border:none; border-top:1px solid #e2e8f0; margin:0;">
-
-  <!-- ============================================
-       V2 — CROPPED / EDITORIAL
-  ============================================= -->
-  <section class="concept-section">
-    <div class="v2-grid">
-
-      <!-- White Belt -->
-      <div class="v2-card v2-card--white">
-        <div class="v2-card__header">
-          <img class="v2-card__ninja" src="ninjas/White Ninja.png" alt="White Belt Ninja">
-          <div class="v2-card__belt-name">White Belt</div>
-          <div class="v2-card__text-row">
-            <div class="v2-card__cash-back">2%</div>
-            <div class="v2-card__cash-label">Cash Back*</div>
-          </div>
-        </div>
-        <div class="v2-card__body">
-          <div class="v2-card__requirement">Sign Up</div>
-          <ul class="v2-card__perks">
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              Earn on every order
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Yellow Belt -->
-      <div class="v2-card v2-card--yellow">
-        <div class="v2-card__header">
-          <img class="v2-card__ninja" src="ninjas/Yellow Ninja.png" alt="Yellow Belt Ninja">
-          <div class="v2-card__belt-name">Yellow Belt</div>
-          <div class="v2-card__text-row">
-            <div class="v2-card__cash-back">4%</div>
-            <div class="v2-card__cash-label">Cash Back*</div>
-          </div>
-        </div>
-        <div class="v2-card__body">
-          <div class="v2-card__requirement">Spend $250 within 12 months</div>
-          <ul class="v2-card__perks">
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              $10 Tier Entry Gift
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Blue Belt -->
-      <div class="v2-card v2-card--blue">
-        <div class="v2-card__header">
-          <img class="v2-card__ninja" src="ninjas/Blue Ninja.png" alt="Blue Belt Ninja">
-          <div class="v2-card__belt-name">Blue Belt</div>
-          <div class="v2-card__text-row">
-            <div class="v2-card__cash-back">6%</div>
-            <div class="v2-card__cash-label">Cash Back*</div>
-          </div>
-        </div>
-        <div class="v2-card__body">
-          <div class="v2-card__requirement">Spend $1,000 within 12 months</div>
-          <ul class="v2-card__perks">
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              $20 Tier Entry Gift
-            </li>
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              Free Ninja Keychain
-              <span class="perk-preview">
-                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
-                <span class="perk-preview__popup"><img src="ninjas/keychain.png" alt="Ninja Keychain"></span>
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Black Belt -->
-      <div class="v2-card v2-card--black">
-        <div class="v2-card__header">
-          <img class="v2-card__ninja" src="ninjas/Black Ninja.png" alt="Black Belt Ninja">
-          <div class="v2-card__belt-name">Black Belt</div>
-          <div class="v2-card__text-row">
-            <div class="v2-card__cash-back">10%</div>
-            <div class="v2-card__cash-label">Cash Back*</div>
-          </div>
-        </div>
-        <div class="v2-card__body">
-          <div class="v2-card__requirement">Spend $4,000 within 12 months</div>
-          <ul class="v2-card__perks">
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              $30 Tier Entry Gift
-            </li>
-            <li class="v2-card__perk">
-              <span class="v2-card__perk-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              Free Ninja Dojo Defender
-              <span class="perk-preview">
-                <span class="perk-preview__trigger"><img src="ninjas/eye.png" alt="Preview"></span>
-                <span class="perk-preview__popup"><img src="ninjas/plushie.png" alt="Ninja Dojo Defender"></span>
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-    <div class="carousel-dots" id="v2-dots"></div>
-  </section>
 
   <script>
     function initCarousel(gridSelector, dotsId) {
@@ -794,7 +552,34 @@
     }
 
     initCarousel('.tiers-grid', 'v1-dots');
-    initCarousel('.v2-grid', 'v2-dots');
+
+    // Lightbox for mobile, hover for desktop
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+    }
+
+    document.querySelectorAll('.perk-preview__trigger').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        if (window.innerWidth > 700) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const popup = trigger.nextElementSibling;
+        const img = popup.querySelector('img');
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('active');
+      });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    lightboxImg.addEventListener('click', closeLightbox);
   </script>
 
 </body>
